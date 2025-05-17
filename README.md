@@ -85,3 +85,19 @@ This project aims to develop a Python-based proof-of-concept (PoC) web applicati
 * Gather stakeholder feedback and iterate based on insights.
 * Expand capabilities towards production-grade application.
 * Explore additional integration opportunities with emergency response systems.
+
+## Running the PoC server
+
+Install requirements and start the FastAPI server using Uvicorn:
+
+```bash
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
+
+### New API Endpoints
+
+* `POST /upload-audio` - Accepts an audio file along with `latitude` and `longitude` form fields. The file is temporarily stored on the server for further processing.
+* `WebSocket /ws/audio` - Accepts streaming audio bytes. Include `latitude` and `longitude` query parameters when connecting. Each received chunk is stored in a temporary directory on the server along with a metadata file for the connection.
+
+Geolocation values are currently simulated by the client and included as request data.
