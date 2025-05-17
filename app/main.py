@@ -61,3 +61,10 @@ async def websocket_endpoint(
         pass
     finally:
         await websocket.close()
+from fastapi import FastAPI, Depends
+from app.utils.config import Settings, get_settings
+
+
+@app.get('/health')
+def health(settings: Settings = Depends(get_settings)):
+    return {"status": "ok"}
