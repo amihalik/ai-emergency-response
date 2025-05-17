@@ -68,6 +68,21 @@ Run the development server with:
 uvicorn app.main:app --reload
 ```
 
+### Environment Variables
+
+Copy `.env.example` to `.env` and add your Azure resource credentials:
+
+```bash
+cp .env.example .env
+# Edit .env and provide endpoint URLs and API keys
+```
+
+The application expects the following variables:
+
+* `AZURE_SPEECH_ENDPOINT` and `AZURE_SPEECH_KEY`
+* `AZURE_AUDIO_ENDPOINT` and `AZURE_AUDIO_KEY`
+* `AZURE_OPENAI_ENDPOINT` and `AZURE_OPENAI_KEY`
+
 ## Development Roadmap
 
 1. **Setup and Configuration**
