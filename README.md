@@ -52,6 +52,22 @@ This project aims to develop a Python-based proof-of-concept (PoC) web applicati
 * **Cloud Services:** Azure OpenAI GPT, Azure Cognitive Services (Speech-to-Text, Speech Analytics, Audio Classification)
 * **Database:** SQLite or PostgreSQL for storing incident data and emergency resource information
 
+## Setup
+
+Create and activate a Python virtual environment before installing the core dependencies:
+
+```bash
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+Run the development server with:
+
+```bash
+uvicorn app.main:app --reload
+```
+
 ## Development Roadmap
 
 1. **Setup and Configuration**
