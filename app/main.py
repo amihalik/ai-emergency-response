@@ -18,9 +18,16 @@ import os
 import uuid
 
 app = FastAPI()
-templates = Jinja2Templates(directory="templates")
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+# Resolve template and static paths relative to this file
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
+
+app.mount(
+    "/static",
+    StaticFiles(directory=os.path.join(BASE_DIR, "static")),
+    name="static",
+)
 
 TMP_DIR = os.path.join(os.path.dirname(__file__), "tmp")
 os.makedirs(TMP_DIR, exist_ok=True)
