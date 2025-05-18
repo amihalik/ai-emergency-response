@@ -52,6 +52,37 @@ This project aims to develop a Python-based proof-of-concept (PoC) web applicati
 * **Cloud Services:** Azure OpenAI GPT, Azure Cognitive Services (Speech-to-Text, Speech Analytics, Audio Classification)
 * **Database:** SQLite or PostgreSQL for storing incident data and emergency resource information
 
+## Setup
+
+Create and activate a Python virtual environment before installing the core dependencies:
+
+```bash
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+Run the development server with:
+
+```bash
+uvicorn app.main:app --reload
+```
+
+### Environment Variables
+
+Copy `.env.example` to `.env` and add your Azure resource credentials:
+
+```bash
+cp .env.example .env
+# Edit .env and provide endpoint URLs and API keys
+```
+
+The application expects the following variables:
+
+* `AZURE_SPEECH_ENDPOINT` and `AZURE_SPEECH_KEY`
+* `AZURE_AUDIO_ENDPOINT` and `AZURE_AUDIO_KEY`
+* `AZURE_OPENAI_ENDPOINT` and `AZURE_OPENAI_KEY`
+
 ## Development Roadmap
 
 1. **Setup and Configuration**
@@ -85,3 +116,19 @@ This project aims to develop a Python-based proof-of-concept (PoC) web applicati
 * Gather stakeholder feedback and iterate based on insights.
 * Expand capabilities towards production-grade application.
 * Explore additional integration opportunities with emergency response systems.
+
+## Running the PoC server
+
+Install requirements and start the FastAPI server using Uvicorn:
+
+```bash
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
+
+### New API Endpoints
+
+* `POST /upload-audio` - Accepts an audio file along with `latitude` and `longitude` form fields. The file is temporarily stored on the server for further processing.
+* `WebSocket /ws/audio` - Accepts streaming audio bytes. Each received chunk is stored in a temporary directory on the server.
+
+Geolocation values are currently simulated by the client and included as request data.

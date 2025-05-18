@@ -1,1 +1,4 @@
 azure-cognitiveservices-speech
+fastapi
+uvicorn
+python-dotenv
