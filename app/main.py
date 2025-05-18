@@ -1,11 +1,25 @@
-from fastapi import FastAPI, UploadFile, File, Form, WebSocket, WebSocketDisconnect, HTTPException
+from fastapi import (
+    Depends,
+    FastAPI,
+    File,
+    Form,
+    UploadFile,
+    WebSocket,
+    WebSocketDisconnect,
+)
 import os
 import uuid
+
+from app.utils.config import Settings, get_settings
 
 app = FastAPI()
 
 TMP_DIR = os.path.join(os.path.dirname(__file__), "tmp")
 os.makedirs(TMP_DIR, exist_ok=True)
+
+@app.get("/health")
+def health(settings: Settings = Depends(get_settings)):
+    return {"status": "ok"}
 
 @app.post("/upload-audio")
 async def upload_audio(
@@ -14,9 +28,6 @@ async def upload_audio(
     longitude: float = Form(...),
 ):
     """Receive an audio file and associated geolocation metadata."""
-    if not file.content_type or not file.content_type.startswith("audio/"):
-        raise HTTPException(status_code=400, detail="Unsupported file type")
-
     file_id = str(uuid.uuid4())
     temp_path = os.path.join(TMP_DIR, f"{file_id}_{file.filename}")
     with open(temp_path, "wb") as f:
@@ -31,6 +42,7 @@ async def upload_audio(
         "latitude": latitude,
         "longitude": longitude,
     }
+
 
 @app.websocket("/ws/audio")
 async def websocket_endpoint(
@@ -61,10 +73,3 @@ async def websocket_endpoint(
         pass
     finally:
         await websocket.close()
-from fastapi import FastAPI, Depends
-from app.utils.config import Settings, get_settings
-
-
-@app.get('/health')
-def health(settings: Settings = Depends(get_settings)):
-    return {"status": "ok"}
