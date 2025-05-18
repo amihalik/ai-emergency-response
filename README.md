@@ -25,6 +25,8 @@ This project aims to develop a Python-based proof-of-concept (PoC) web applicati
 ### Caller Attribute Analysis
 
 * Identify caller attributes such as gender, approximate age, and emotional state using Azure Speech Analytics.
+* The `CallerAttributes` dataclass encapsulates the inferred gender, age group, and emotional state for each call.
+* Attribute analysis runs alongside speech-to-text transcription in the processing pipeline.
 
 ### Background Noise Classification
 
