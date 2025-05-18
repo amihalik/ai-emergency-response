@@ -140,6 +140,43 @@ The application expects the following variables:
 * Expand capabilities towards production-grade application.
 * Explore additional integration opportunities with emergency response systems.
 
+## Deployment
+
+### Local Development
+
+1. Create a virtual environment and install dependencies:
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate
+   pip install -r requirements.txt
+   ```
+2. Run the API locally:
+   ```bash
+   uvicorn main:app --reload
+   ```
+
+### Docker
+
+1. Build the container:
+   ```bash
+   docker build -t emergency-response .
+   ```
+2. Run the container:
+   ```bash
+   docker run -p 8000:8000 emergency-response
+   ```
+
+### Azure App Service
+
+1. Build and push the Docker image to a container registry (e.g., Azure Container Registry).
+2. Create an Azure App Service Web App configured for Docker.
+3. Provide environment variables and secrets as App Settings in Azure.
+4. Deploy the container image to the Web App.
+
+The application exposes a single `/incident` endpoint accepting an audio file upload.
+
+Environment variables such as API keys for Azure services should be provided as standard environment variables (e.g., `AZURE_OPENAI_KEY`, `AZURE_SPEECH_KEY`). When running in Docker or Azure App Service, set these variables through the hosting environment's configuration options.
+
 ## Running the Resource Assignment Demo
 
 The repository includes simple scripts to seed a SQLite database with sample emergency resources and assign them to incidents based on location and type.
@@ -166,3 +203,4 @@ uvicorn app.main:app --reload
 * `WebSocket /ws/audio` - Accepts streaming audio bytes. Each received chunk is stored in a temporary directory on the server.
 
 Geolocation values are currently simulated by the client and included as request data.
+

@@ -1,3 +1,4 @@
+pytest
 azure-cognitiveservices-speech
 fastapi
 jinja2
