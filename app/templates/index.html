@@ -1,57 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Incident Dashboard</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 8px; }
-        th { background-color: #f2f2f2; }
-        #map { height: 300px; margin-top: 20px; }
-    </style>
+    <meta charset="UTF-8">
+    <title>911 AI Emergency Response</title>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css" />
 </head>
 <body>
-    <h1>Active Incidents</h1>
-    <table>
-        <tr>
-            <th>Caller</th>
-            <th>Transcription</th>
-            <th>Background Noise</th>
-            <th>Type</th>
-            <th>Severity</th>
-            <th>Resources</th>
-            <th>ETA</th>
-            <th>Actions</th>
-        </tr>
-        {% for incident in incidents %}
-        <tr>
-            <td>{{ incident.caller }}</td>
-            <td>{{ incident.transcription }}</td>
-            <td>{{ incident.background_noise }}</td>
-            <td>{{ incident.incident_type }}</td>
-            <td>{{ incident.severity }}</td>
-            <td>{{ incident.resources }}</td>
-            <td>{{ incident.eta }}</td>
-            <td><a href="/edit/{{ incident.id }}">Edit</a></td>
-        </tr>
-        {% endfor %}
-    </table>
-
-    <div id="map"></div>
-    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-    <script>
-        var map = L.map('map').setView([37.7749, -122.4194], 4);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
-        }).addTo(map);
-        var incidents = {{ incidents | tojson }};
-        incidents.forEach(function(i) {
-            if (i.lat && i.lon) {
-                L.marker([i.lat, i.lon]).addTo(map)
-                    .bindPopup(i.incident_type + ' (' + i.severity + ')');
-            }
-        });
-    </script>
+    <header class="app-header">911 AI Emergency Response System</header>
+    <div class="dashboard">
+        <div class="card live-audio" id="liveAudioCard">
+            <h2>Live Audio</h2>
+            <svg viewBox="0 0 300 60">
+                <path id="wavePath" d="M0,30 L300,30"></path>
+            </svg>
+            <div class="timer">00:00</div>
+        </div>
+        <div class="card caller-attributes">
+            <h2>Caller Attributes</h2>
+            <div class="attributes">
+                <span>Calm</span>
+                <span>Female</span>
+                <span>Adult</span>
+            </div>
+        </div>
+        <div class="card background-noise">
+            <h2>Background Noise</h2>
+            <ul>
+                <li>Siren</li>
+                <li>Shouting</li>
+            </ul>
+        </div>
+        <div class="card transcript" style="grid-column: 2 / span 2;">
+            <h2>Transcript</h2>
+            <div class="transcript-log">
+                <div><span class="caller">Caller:</span> Help, there's a fire!</div>
+                <div><span class="dispatch">Dispatch:</span> We're sending units now.</div>
+            </div>
+        </div>
+        <div class="card map" id="mapCard">
+            <h2>Location</h2>
+            <div id="map"></div>
+        </div>
+        <div class="card nearest-resources">
+            <h2>Nearest Resources</h2>
+            <ul></ul>
+        </div>
+    </div>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+    <script src="/static/app.js"></script>
 </body>
 </html>
