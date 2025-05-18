@@ -85,3 +85,15 @@ This project aims to develop a Python-based proof-of-concept (PoC) web applicati
 * Gather stakeholder feedback and iterate based on insights.
 * Expand capabilities towards production-grade application.
 * Explore additional integration opportunities with emergency response systems.
+
+## Running the Resource Assignment Demo
+
+The repository includes simple scripts to seed a SQLite database with sample emergency resources and assign them to incidents based on location and type.
+
+```bash
+# Install any required dependencies (only the Python standard library is used)
+python demo.py
+```
+
+Running `demo.py` will create `emergency.db` in the repository folder, seed it with example fire stations, hospitals, and police stations, and process a sample incident. The script outputs the assigned resource identifier and the estimated arrival time in minutes.
+
