@@ -17,11 +17,9 @@ app = FastAPI()
 TMP_DIR = os.path.join(os.path.dirname(__file__), "tmp")
 os.makedirs(TMP_DIR, exist_ok=True)
 
-
 @app.get("/health")
 def health(settings: Settings = Depends(get_settings)):
     return {"status": "ok"}
-
 
 @app.post("/upload-audio")
 async def upload_audio(
@@ -47,13 +45,22 @@ async def upload_audio(
 
 
 @app.websocket("/ws/audio")
-async def websocket_endpoint(websocket: WebSocket):
+async def websocket_endpoint(
+    websocket: WebSocket,
+    latitude: float,
+    longitude: float,
+):
     await websocket.accept()
     try:
         # Generate a unique id per connection to store streamed chunks
         conn_id = str(uuid.uuid4())
         conn_dir = os.path.join(TMP_DIR, conn_id)
         os.makedirs(conn_dir, exist_ok=True)
+
+        # Save geolocation metadata for the connection
+        with open(os.path.join(conn_dir, "metadata.txt"), "w") as meta:
+            meta.write(f"{latitude},{longitude}")
+
         index = 0
         while True:
             data = await websocket.receive_bytes()
