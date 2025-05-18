@@ -25,6 +25,8 @@ This project aims to develop a Python-based proof-of-concept (PoC) web applicati
 ### Caller Attribute Analysis
 
 * Identify caller attributes such as gender, approximate age, and emotional state using Azure Speech Analytics.
+* The `CallerAttributes` dataclass encapsulates the inferred gender, age group, and emotional state for each call.
+* Attribute analysis runs alongside speech-to-text transcription in the processing pipeline.
 
 ### Background Noise Classification
 
@@ -34,6 +36,7 @@ This project aims to develop a Python-based proof-of-concept (PoC) web applicati
 
 * Leverage Azure OpenAI GPT to analyze transcriptions and classified audio cues, identifying emergency type (car accident, violence, fire, medical emergency).
 * Extract essential incident details including severity and number of persons affected.
+* Example implementation provided in `incident_classifier.py` which sends a structured prompt to Azure OpenAI and parses JSON results.
 
 ### Geolocation-based Emergency Resource Management
 
@@ -45,12 +48,50 @@ This project aims to develop a Python-based proof-of-concept (PoC) web applicati
 * Create an interactive web dashboard showing live incidents, caller attributes, background noise details, geolocation, emergency resource assignments, and response times.
 * Allow manual updates and adjustments of incident details and emergency responses.
 
+### Processing Pipeline
+
+* Speech-to-text transcription and background noise classification are performed
+  together on the same audio input.
+* The pipeline returns an `Incident` data object containing the transcript and a
+  list of detected background sounds with timestamps and confidence scores.
+
 ## Technical Stack
 
 * **Frontend:** Python-based UI framework (e.g., Streamlit, FastAPI with minimal frontend)
 * **Backend:** Python (FastAPI)
 * **Cloud Services:** Azure OpenAI GPT, Azure Cognitive Services (Speech-to-Text, Speech Analytics, Audio Classification)
 * **Database:** SQLite or PostgreSQL for storing incident data and emergency resource information
+
+## Setup
+
+Create and activate a Python virtual environment before installing the core dependencies:
+
+```bash
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+Run the development server with:
+
+```bash
+uvicorn app.main:app --reload
+```
+
+### Environment Variables
+
+Copy `.env.example` to `.env` and add your Azure resource credentials:
+
+```bash
+cp .env.example .env
+# Edit .env and provide endpoint URLs and API keys
+```
+
+The application expects the following variables:
+
+* `AZURE_SPEECH_ENDPOINT` and `AZURE_SPEECH_KEY`
+* `AZURE_AUDIO_ENDPOINT` and `AZURE_AUDIO_KEY`
+* `AZURE_OPENAI_ENDPOINT` and `AZURE_OPENAI_KEY`
 
 ## Development Roadmap
 
@@ -97,3 +138,18 @@ python demo.py
 
 Running `demo.py` will create `emergency.db` in the repository folder, seed it with example fire stations, hospitals, and police stations, and process a sample incident. The script outputs the assigned resource identifier and the estimated arrival time in minutes.
 
+## Running the PoC server
+
+Install requirements and start the FastAPI server using Uvicorn:
+
+```bash
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
+
+### New API Endpoints
+
+* `POST /upload-audio` - Accepts an audio file along with `latitude` and `longitude` form fields. The file is temporarily stored on the server for further processing.
+* `WebSocket /ws/audio` - Accepts streaming audio bytes. Each received chunk is stored in a temporary directory on the server.
+
+Geolocation values are currently simulated by the client and included as request data.
