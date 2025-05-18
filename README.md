@@ -36,6 +36,7 @@ This project aims to develop a Python-based proof-of-concept (PoC) web applicati
 
 * Leverage Azure OpenAI GPT to analyze transcriptions and classified audio cues, identifying emergency type (car accident, violence, fire, medical emergency).
 * Extract essential incident details including severity and number of persons affected.
+* Example implementation provided in `incident_classifier.py` which sends a structured prompt to Azure OpenAI and parses JSON results.
 
 ### Geolocation-based Emergency Resource Management
 
