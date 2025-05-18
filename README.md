@@ -48,6 +48,19 @@ This project aims to develop a Python-based proof-of-concept (PoC) web applicati
 * Create an interactive web dashboard showing live incidents, caller attributes, background noise details, geolocation, emergency resource assignments, and response times.
 * Allow manual updates and adjustments of incident details and emergency responses.
 
+### Running the Dashboard
+
+Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+Start the server:
+```bash
+uvicorn app.main:app --reload
+```
+Then open `http://localhost:8000` in your browser.
+
 ### Processing Pipeline
 
 * Speech-to-text transcription and background noise classification are performed

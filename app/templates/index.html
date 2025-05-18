@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Incident Dashboard</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background-color: #f2f2f2; }
+        #map { height: 300px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Active Incidents</h1>
+    <table>
+        <tr>
+            <th>Caller</th>
+            <th>Transcription</th>
+            <th>Background Noise</th>
+            <th>Type</th>
+            <th>Severity</th>
+            <th>Resources</th>
+            <th>ETA</th>
+            <th>Actions</th>
+        </tr>
+        {% for incident in incidents %}
+        <tr>
+            <td>{{ incident.caller }}</td>
+            <td>{{ incident.transcription }}</td>
+            <td>{{ incident.background_noise }}</td>
+            <td>{{ incident.incident_type }}</td>
+            <td>{{ incident.severity }}</td>
+            <td>{{ incident.resources }}</td>
+            <td>{{ incident.eta }}</td>
+            <td><a href="/edit/{{ incident.id }}">Edit</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([37.7749, -122.4194], 4);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        var incidents = {{ incidents | tojson }};
+        incidents.forEach(function(i) {
+            if (i.lat && i.lon) {
+                L.marker([i.lat, i.lon]).addTo(map)
+                    .bindPopup(i.incident_type + ' (' + i.severity + ')');
+            }
+        });
+    </script>
+</body>
+</html>
