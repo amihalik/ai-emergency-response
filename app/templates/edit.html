@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Incident</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        label { display: block; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Edit Incident {{ incident.id }}</h1>
+    <form method="post" action="/update/{{ incident.id }}">
+        <label>
+            Severity:
+            <input type="text" name="severity" value="{{ incident.severity }}">
+        </label>
+        <label>
+            Resources:
+            <input type="text" name="resources" value="{{ incident.resources }}">
+        </label>
+        <button type="submit">Save</button>
+    </form>
+    <p><a href="/">Back to dashboard</a></p>
+</body>
+</html>

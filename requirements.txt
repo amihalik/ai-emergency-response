@@ -1,1 +1,6 @@
-fastapi\nuvicorn[standard]\npytest
+pytest
+azure-cognitiveservices-speech
+fastapi
+jinja2
+uvicorn
+python-dotenv

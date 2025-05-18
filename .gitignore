@@ -1,1 +1,6 @@
-__pycache__/\n*.pyc\n.env\nvenv/\n
+__pycache__/
+app/tmp/
+*.pyc
+.env/
+.env
+venv/
